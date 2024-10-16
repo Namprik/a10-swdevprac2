@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 export default function Banner() {
   const covers = [
@@ -12,7 +13,7 @@ export default function Banner() {
   ];
   const [index, setIndex] = useState(0);
   const router = useRouter();
-
+  const { data: session } = useSession();
   return (
     <div className="block relative py-10" onClick={() => setIndex(index + 1)}>
       <Image
@@ -27,6 +28,11 @@ export default function Banner() {
           สามารถกดลงทะเบียนรับวัคซีนได้แล้ววันนี้
         </p>
       </div>
+      {session ? (
+        <div className="z-30 absolute top-5 right-10 font-semibold">
+          Welcome {session.user?.name}
+        </div>
+      ) : null}
       <button
         className="absolute bg-[#e0f2fe] rounded right-0 z-30 p-1 mr-2 font-light text-sm text-slate-600 border border-slate-600 hover:text-white hover:bg-slate-600 hover:border-transparent"
         onClick={(e) => {

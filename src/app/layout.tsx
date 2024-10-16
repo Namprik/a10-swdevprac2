@@ -1,11 +1,15 @@
 import "./globals.css";
 import TopMenu from "@/components/TopMenu";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
+import NextAuthProvider from "@/providers/NextAuthProvider";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <head>
@@ -15,8 +19,10 @@ export default function RootLayout({
         ></link>
       </head>
       <body className="font-prompt">
-        <TopMenu />
-        {children}
+        <NextAuthProvider session={session}>
+          <TopMenu />
+          {children}
+        </NextAuthProvider>
       </body>
     </html>
   );
